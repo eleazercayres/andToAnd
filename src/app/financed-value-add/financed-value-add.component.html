@@ -1,0 +1,47 @@
+<div class="card">
+
+  <div class="card-body">
+    <form [formGroup]="angForm" novalidate>
+
+      <div class="form-group">
+        <label for="EmailId">Email</label>
+        <input size="30" id="EmailId" type="text" class="form-control" 
+        formControlName="Email"
+        #Email />
+      </div>
+      <div
+        *ngIf="angForm.controls['Email'].invalid && (angForm.controls['Email'].dirty || angForm.controls['Email'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['Email'].errors.required">
+          Email obrigatório.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="FinancedValueId">Valor a financiar</label>
+        <input currencyMask [options]="{ prefix: '€ ', thousands: '.', decimal: ',' }" size="30" id="FinancedValueId" type="text" class="form-control" formControlName="FinancedValue"
+          #FinancedValue />
+        <small id="FinancedValueSmall" class="form-text text-muted">Não inclua o valor de entrada inicial.</small>
+      </div>
+      <div
+        *ngIf="angForm.controls['FinancedValue'].invalid && (angForm.controls['FinancedValue'].dirty || angForm.controls['FinancedValue'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['FinancedValue'].errors.required">
+          Valor a financiar obrigatório.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <re-captcha #captchaRef="reCaptcha" (resolved)="resolved($event, Email.value, FinancedValue.value)"
+          siteKey="6Ldp0xgUAAAAAF_iIss_hpFaVrjLbPGjwyfJwebB" size="invisible"></re-captcha>
+      </div>
+
+      <div class="form-group">
+        <button style="background: #1AAEB7;" (click)="captchaRef.execute();" type="submit" class="btn btn-primary"
+          [disabled]="angForm.pristine || angForm.invalid">
+          Seguinte
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
